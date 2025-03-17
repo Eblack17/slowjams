@@ -1,106 +1,191 @@
-# SlowJams: YouTube and Twitter to Slowed MP3 Converter
+# SlowJams
 
-## Overview
+![SlowJams](https://img.shields.io/badge/SlowJams-v0.1.0-blue)
+![Python](https://img.shields.io/badge/Python-3.10+-green)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-SlowJams is a desktop application that allows users to download videos from YouTube and Twitter, convert them to MP3 audio files, apply AI-powered effects (including slowing down the audio), and save the processed MP3 files. The application provides a user-friendly interface with batch processing capabilities, theme customization, and advanced audio editing features.
+SlowJams is a powerful desktop application for downloading videos from YouTube and Twitter, converting them to audio, and applying "slowed + reverb" effects for that unique aesthetic sound.
 
 ## Features
 
-- **Multi-platform Video Download**: Download videos from YouTube and Twitter with URL detection
-- **Video to MP3 Conversion**: Convert downloaded videos to high-quality MP3 files
-- **AI-Powered Audio Processing**: Slow down audio while maintaining quality using AI techniques
-- **Advanced Audio Editing**: Trim audio, adjust volume, and apply effects
-- **Batch Processing**: Process multiple files at once with progress tracking
-- **Theme Customization**: Choose between light, dark, or system theme
-- **User Preferences**: Save and restore user settings
-- **Drag and Drop Support**: Easy file handling with drag and drop functionality
-- **Progress Visualization**: Clear visual feedback during processing operations
-- **Audio Visualization**: Waveform displays for audio files
+- **Multi-Platform Support**: Download videos from YouTube and Twitter with ease
+- **Audio Extraction**: Extract high-quality audio from videos
+- **Audio Effects**:
+  - Slow down audio with pitch preservation
+  - Add customizable reverb
+  - Apply pitch shifting, chorus, and EQ
+  - Choose from presets like "Slow Jam", "Chopped & Screwed", and "Vaporwave"
+- **Batch Processing**: Process multiple files at once with a queue system
+- **Modern UI**: Clean interface with light/dark/system theme support
+- **Customization**: Extensive settings for output format, quality, and effects
+- **Progress Visualization**: See real-time progress for all operations
+- **Audio Visualization**: Preview audio waveforms and effects
 
 ## Installation
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- Required Python packages (see requirements.txt)
+- Python 3.10 or higher
 - FFmpeg (for audio processing)
+- PyQt5 (for UI)
 
-### Setup
+### Install from Source
 
-1. Clone this repository
-2. Install the dependencies: `pip install -r requirements.txt`
-3. Copy `.env.example` to `.env` and adjust settings as needed
-4. Run the application: `python main.py`
+1. Clone the repository:
+```bash
+git clone https://github.com/Eblack17/slowjams.git
+cd slowjams
+```
+
+2. Create a virtual environment (recommended):
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\\Scripts\\activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Create a `.env` file from the example:
+```bash
+cp .env.example .env
+```
+
+5. Edit the `.env` file to configure your settings.
+
+6. Run the application:
+```bash
+python main.py
+```
 
 ## Usage
 
-### Download Videos
+### Graphical User Interface
 
-1. Enter a YouTube or Twitter video URL in the Download tab
-2. Click "Download" to fetch the video
-3. The application will automatically detect the platform and download the video
+Simply run `python main.py` to start the application in GUI mode.
 
-### Convert to MP3
+1. Enter a YouTube or Twitter URL in the input field
+2. Select your desired effect and settings
+3. Click "Download & Process" to begin
+4. Monitor progress and access the file when complete
 
-1. After downloading, switch to the Convert tab
-2. Select the downloaded video file
-3. Configure conversion settings (bitrate, sample rate)
-4. Click "Convert" to generate the MP3 file
+### Command Line Usage
 
-### Edit Audio
+SlowJams can also be used from the command line:
 
-1. Switch to the Edit tab
-2. Load the MP3 file
-3. Use the trimming controls to select the desired portion
-4. Adjust volume as needed
-5. Save the edited audio
+```bash
+# Basic usage
+python main.py --headless --url "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
-### Apply AI Processing
+# Specify output file
+python main.py --headless --url "https://www.youtube.com/watch?v=dQw4w9WgXcQ" --output "output.mp3"
 
-1. Navigate to the AI Processing tab
-2. Load the MP3 file
-3. Configure the slowing factor and other AI settings
-4. Click "Apply" to process the audio
-5. Save the processed MP3
+# Choose effect preset
+python main.py --headless --url "https://www.youtube.com/watch?v=dQw4w9WgXcQ" --effect chopped
 
-### Batch Processing
+# Customize speed and format
+python main.py --headless --url "https://www.youtube.com/watch?v=dQw4w9WgXcQ" --speed 0.7 --format flac
+```
 
-1. Add multiple files to the batch processing queue
-2. Configure settings for all files
-3. Start batch processing
-4. Monitor progress in the batch processing dialog
-
-## Project Structure
-
-- `main.py`: Application entry point
-- `core/`: Core processing logic
-- `ui/`: User interface components
-- `data/`: Data management
-- `utils/`: Utility functions
-- `resources/`: Application resources
-- `project-docs/`: Project documentation
+For more options, run: `python main.py --help`
 
 ## Configuration
 
-Application settings can be configured through the `.env` file or via the Preferences dialog in the application.
+SlowJams can be configured through the `.env` file or through the preferences dialog in the application.
+
+Key configuration options:
+- `DOWNLOAD_DIR`: Default directory for downloads
+- `OUTPUT_FORMAT`: Default audio format (MP3, WAV, FLAC, AAC, OGG)
+- `OUTPUT_QUALITY`: Default bitrate for lossy formats
+- `DEFAULT_EFFECT`: Default effect preset to apply
+- `THEME`: UI theme (light, dark, system)
+
+## Project Structure
+
+```
+slowjams/
+├── core/                      # Core application functionality
+│   ├── downloader.py          # Media downloading functionality
+│   ├── converter.py           # Format conversion
+│   ├── processor.py           # Audio processing and effects
+│   └── queue_manager.py       # Processing queue management
+│
+├── ui/                        # User interface components
+│   ├── main_window.py         # Main application window
+│   ├── preferences.py         # Settings dialog
+│   ├── batch_dialog.py        # Batch processing interface
+│   └── widgets/               # Reusable UI components
+│
+├── data/                      # Data management
+│   ├── database.py            # SQLite database interface
+│   ├── history.py             # Download and processing history
+│   └── settings.py            # User settings management
+│
+├── utils/                     # Utility functions
+│   ├── env_loader.py          # Environment variable management
+│   ├── validators.py          # Input validation
+│   └── file_ops.py            # File operations
+│
+├── tests/                     # Test suite
+│
+├── project-docs/              # Project documentation
+│
+├── .env.example               # Example environment variables
+├── requirements.txt           # Python dependencies
+└── main.py                    # Application entry point
+```
 
 ## Development
 
-### Testing
+### Environment Setup
 
-Run the test suite with: `python run_tests.py`
+1. Install development dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-### Adding New Features
+2. Install pre-commit hooks:
+```bash
+pip install pre-commit
+pre-commit install
+```
 
-See the project documentation in the `project-docs/` directory for development guidelines.
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov=.
+
+# Run specific test file
+pytest tests/test_downloader.py
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
+## Acknowledgements
 
-- PyQt5 for the UI framework
-- yt-dlp for YouTube downloading
-- FFmpeg for audio processing
-- Various AI models for audio manipulation
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) for video downloading
+- [FFmpeg](https://ffmpeg.org/) for audio processing
+- [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) for the UI
+- [librosa](https://librosa.org/) for advanced audio analysis
+
+---
+
+Made with ♥ by [EBdesigns](https://github.com/Eblack17)
